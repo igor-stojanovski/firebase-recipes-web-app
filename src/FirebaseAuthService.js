@@ -30,6 +30,7 @@ const registerUser = (email, password) => {
 const loginUser = (email, password) => {
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
+      // eslint-disable-next-line no-unused-vars
       const user = userCredential.user;
     })
     .catch((error) => {
@@ -55,6 +56,7 @@ const passwordResetEmail = (username) => {
       alert("reset email password sent");
     })
     .catch((error) => {
+      // eslint-disable-next-line no-unused-vars
       const errorCode = error.code;
       const errorMessage = error.message;
       alert(errorMessage);
