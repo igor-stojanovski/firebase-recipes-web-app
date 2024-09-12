@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import firebase from "./FirebaseConfig";
 import {
   getAuth,
@@ -14,9 +15,11 @@ const auth = getAuth();
 const registerUser = (email, password) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
+      // eslint-disable-next-line no-unused-vars
       const user = userCredential.user;
     })
     .catch((error) => {
+      // eslint-disable-next-line no-unused-vars
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(errorMessage);
@@ -30,7 +33,9 @@ const loginUser = (email, password) => {
       const user = userCredential.user;
     })
     .catch((error) => {
+      // eslint-disable-next-line no-unused-vars
       const errorCode = error.code;
+      // eslint-disable-next-line no-unused-vars
       const errorMessage = error.message;
       alert(error.message);
     });
@@ -63,19 +68,25 @@ const loginWithGoogle = () => {
     .then((result) => {
       // This gives you a Google Access Token. You can use it to access the Google API.
       const credential = GoogleAuthProvider.credentialFromResult(result);
+      // eslint-disable-next-line no-unused-vars
       const token = credential.accessToken;
       // The signed-in user info.
+      // eslint-disable-next-line no-unused-vars
       const user = result.user;
       // IdP data available using getAdditionalUserInfo(result)
       // ...
     })
     .catch((error) => {
       // Handle Errors here.
+      // eslint-disable-next-line no-unused-vars
       const errorCode = error.code;
+      // eslint-disable-next-line no-unused-vars
       const errorMessage = error.message;
       // The email of the user's account used.
+      // eslint-disable-next-line no-unused-vars
       const email = error.customData.email;
       // The AuthCredential type that was used.
+      // eslint-disable-next-line no-unused-vars
       const credential = GoogleAuthProvider.credentialFromError(error);
       // ...
     });

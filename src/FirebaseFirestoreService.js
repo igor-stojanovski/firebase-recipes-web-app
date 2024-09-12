@@ -16,7 +16,7 @@ const db = getFirestore(app);
 
 const createDocument = async (document) => {
   try {
-    const docRef = await addDoc(collection(db, "recipes"), document);
+    await addDoc(collection(db, "recipes"), document);
   } catch (error) {
     alert(error.message);
   }

@@ -18,6 +18,7 @@ function App() {
   onAuthStateChanged(auth, (user) => {
     setUser(user);
     if (user) {
+      // eslint-disable-next-line no-unused-vars
       const uid = user.uid;
     } else {
     }

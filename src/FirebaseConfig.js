@@ -27,6 +27,7 @@ const config = {
 
 // if (!firebase.app.length) {
 const app = initializeApp(config);
+// eslint-disable-next-line no-unused-vars
 const db = getFirestore(app);
 
 //   firebase.initializeApp(config);
