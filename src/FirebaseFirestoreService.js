@@ -1,5 +1,14 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import {
+  updateDoc,
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  where,
+  doc,
+} from "firebase/firestore";
 
 const config = {
   apiKey: "AIzaSyBjJdTTBbMI4iYrQC9_jxD5GarstpZnQPA",
@@ -22,8 +31,51 @@ const createDocument = async (document) => {
   }
 };
 
+const readDocuments = async ({ user, queryObj }) => {
+  const queries = [queryObj];
+
+  if (!user) {
+    queries.push({
+      field: "isPublished",
+      condition: "==",
+      value: true,
+    });
+  }
+  try {
+    let recipes = [];
+    const querySnapshot = await getDocs(
+      query(
+        collection(db, "recipes"),
+        where(queryObj.field, queryObj.condition, queryObj.value)
+      )
+    );
+    querySnapshot.forEach((doc) => {
+      const id = doc.id;
+      const data = doc.data();
+
+      data.publishDate = new Date(data.publishDate.seconds * 1000);
+
+      recipes.push({ ...data, id });
+    });
+
+    return recipes;
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
+const updateDocument = async (docId, updateObject) => {
+  try {
+    await updateDoc(doc(db, "recipes", docId), { ...updateObject });
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
 const FirebaseFirestoreService = {
   createDocument,
+  readDocuments,
+  updateDocument,
 };
 
 export default FirebaseFirestoreService;
