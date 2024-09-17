@@ -18,21 +18,6 @@ function App() {
   // eslint-disable-next-line no-unused-vars
   const [categoryFilter, setCategoryFilter] = useState("");
 
-  useEffect(() => {
-    handleFetchRecipes();
-  }, [user, handleFetchRecipes]);
-
-  const auth = getAuth();
-
-  onAuthStateChanged(auth, (user) => {
-    setUser(user);
-    if (user) {
-      // eslint-disable-next-line no-unused-vars
-      const uid = user.uid;
-    } else {
-    }
-  });
-
   const handleFetchRecipes = useCallback(async () => {
     const queryObj = {
       field: "isPublished",
@@ -54,6 +39,21 @@ function App() {
       alert(error.message);
     }
   }, [user]);
+
+  useEffect(() => {
+    handleFetchRecipes();
+  }, [user, handleFetchRecipes]);
+
+  const auth = getAuth();
+
+  onAuthStateChanged(auth, (user) => {
+    setUser(user);
+    if (user) {
+      // eslint-disable-next-line no-unused-vars
+      const uid = user.uid;
+    } else {
+    }
+  });
 
   const handleAddRecipe = async (newRecipe) => {
     const queryObj = {
