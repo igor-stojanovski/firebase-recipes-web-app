@@ -20,7 +20,7 @@ function App() {
 
   useEffect(() => {
     handleFetchRecipes();
-  }, [user]);
+  }, [user, handleFetchRecipes]);
 
   const auth = getAuth();
 
