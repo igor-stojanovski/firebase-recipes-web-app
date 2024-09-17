@@ -15,10 +15,12 @@ function App() {
   const [recipes, setRecipes] = useState([]);
   const [currentRecipe, setCurrentRecipe] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  // eslint-disable-next-line no-unused-vars
   const [categoryFilter, setCategoryFilter] = useState("");
 
   useEffect(() => {
     handleFetchRecipes();
+    // eslint-disable-next-line no-unused-vars
   }, [user, categoryFilter]);
 
   const auth = getAuth();
