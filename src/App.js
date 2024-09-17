@@ -20,8 +20,7 @@ function App() {
 
   useEffect(() => {
     handleFetchRecipes();
-    // eslint-disable-next-line no-unused-vars
-  }, [user, categoryFilter]);
+  }, [user]);
 
   const auth = getAuth();
 
