@@ -1,4 +1,4 @@
-import { useEffect, useState, startTransition } from "react";
+import { useEffect, useState, startTransition, useCallback } from "react";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -33,7 +33,7 @@ function App() {
     }
   });
 
-  const handleFetchRecipes = async () => {
+  const handleFetchRecipes = useCallback(async () => {
     const queryObj = {
       field: "isPublished",
       condition: "==",
@@ -53,7 +53,7 @@ function App() {
     } catch (error) {
       alert(error.message);
     }
-  };
+  }, []);
 
   const handleAddRecipe = async (newRecipe) => {
     const queryObj = {
