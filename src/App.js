@@ -53,7 +53,7 @@ function App() {
     } catch (error) {
       alert(error.message);
     }
-  }, []);
+  }, [user]);
 
   const handleAddRecipe = async (newRecipe) => {
     const queryObj = {
