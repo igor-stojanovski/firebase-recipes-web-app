@@ -14,10 +14,12 @@ function App() {
   const [user, setUser] = useState(null);
   const [recipes, setRecipes] = useState([]);
   const [currentRecipe, setCurrentRecipe] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [categoryFilter, setCategoryFilter] = useState("");
 
   useEffect(() => {
     handleFetchRecipes();
-  }, [user]);
+  }, [user, categoryFilter]);
 
   const auth = getAuth();
 
@@ -32,18 +34,21 @@ function App() {
 
   const handleFetchRecipes = async () => {
     const queryObj = {
-      field: "category",
-      condition: "!=",
-      value: "eggsAndBreakfast",
+      field: "isPublished",
+      condition: "==",
+      value: true,
     };
+    setIsLoading(true);
     try {
       const fetchedRecipesResponse = FirebaseFirestoreService.readDocuments({
         user,
         queryObj,
       });
-      fetchedRecipesResponse.then((recipesData) => {
-        setRecipes(recipesData);
-      });
+      fetchedRecipesResponse
+        .then((recipesData) => {
+          setRecipes(recipesData);
+        })
+        .finally(() => setIsLoading(false));
     } catch (error) {
       alert(error.message);
     }
@@ -117,6 +122,12 @@ function App() {
     setCurrentRecipe(null);
   };
 
+  const handleDeleteRecipe = (id) => {
+    FirebaseFirestoreService.deleteDocument(id);
+    handleFetchRecipes();
+    setCurrentRecipe(null);
+  };
+
   return (
     <div className="App">
       <div className="title-row">
@@ -127,6 +138,20 @@ function App() {
       <div className="main">
         <div className="center">
           <div className="recipe-list-box">
+            {isLoading ? (
+              <div className="fire">
+                <div className="flames">
+                  <div className="flame"></div>
+                  <div className="flame"></div>
+                  <div className="flame"></div>
+                  <div className="flame"></div>
+                </div>
+                <div className="logs"></div>
+              </div>
+            ) : null}
+            {!isLoading && recipes && recipes.length === 0 ? (
+              <h5 className="no-recipes">No Recipes Found</h5>
+            ) : null}
             {recipes && recipes.length > 0 ? (
               <div className="recipe-list">
                 {recipes.map((recipe) => {
@@ -138,6 +163,15 @@ function App() {
                         </div>
                       ) : null}
                       <div className="recipe-name">{recipe?.name}</div>
+                      <div className="recipe-image-box">
+                        {recipe.imageUrl ? (
+                          <img
+                            src={recipe.imageUrl}
+                            alt={recipe.name}
+                            className="recipe-image"
+                          />
+                        ) : null}
+                      </div>
                       <div className="recipe-field">
                         Category: {lookupCategoryLabel(recipe?.category)}
                       </div>
@@ -145,13 +179,22 @@ function App() {
                         Publish Date: {formatDate(recipe?.publishDate)}
                       </div>
                       {user ? (
-                        <button
-                          className="primary-button edit-button"
-                          type="button"
-                          onClick={() => handleEditRecipeClick(recipe.id)}
-                        >
-                          Edit
-                        </button>
+                        <>
+                          <button
+                            className="primary-button edit-button"
+                            type="button"
+                            onClick={() => handleEditRecipeClick(recipe.id)}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="primary-button action-button"
+                            type="button"
+                            onClick={() => handleDeleteRecipe(recipe.id)}
+                          >
+                            Delete
+                          </button>
+                        </>
                       ) : null}
                     </div>
                   );
@@ -166,6 +209,7 @@ function App() {
             existingRecipe={currentRecipe}
             handleUpdateRecipe={handleUpdateRecipe}
             handleEditRecipeCancel={handleEditRecipeCancel}
+            handleDeleteRecipe={handleDeleteRecipe}
           />
         ) : null}
       </div>

@@ -8,6 +8,7 @@ import {
   query,
   where,
   doc,
+  deleteDoc,
 } from "firebase/firestore";
 
 const config = {
@@ -32,8 +33,10 @@ const createDocument = async (document) => {
 };
 
 const readDocuments = async ({ user, queryObj }) => {
+  // not in use at the moment
   const queries = [queryObj];
 
+  // not in use at the moment
   if (!user) {
     queries.push({
       field: "isPublished",
@@ -72,10 +75,19 @@ const updateDocument = async (docId, updateObject) => {
   }
 };
 
+const deleteDocument = async (id) => {
+  try {
+    await deleteDoc(doc(db, "recipes", id));
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
 const FirebaseFirestoreService = {
   createDocument,
   readDocuments,
   updateDocument,
+  deleteDocument,
 };
 
 export default FirebaseFirestoreService;
